@@ -18,9 +18,9 @@ export interface NativeProps extends ViewProps {
    * The variant of the liquid glass material.
    * You can toggle between 'clear', 'regular', and 'none' to materialize the glass.
    *
-   * Defaults to 'regular'.
+   * Defaults to 'clear'.
    */
-  effect?: CodegenTypes.WithDefault<'clear' | 'regular' | 'none', 'regular'>;
+  effectStyle?: CodegenTypes.WithDefault<'clear' | 'regular' | 'none', 'clear'>;
   /**
    * The color of the glass effect.
    *

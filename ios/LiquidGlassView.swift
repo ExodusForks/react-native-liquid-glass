@@ -26,9 +26,9 @@ import UIKit
 @available(iOS 26.0, tvOS 26.0, *)
 @objc public class LiquidGlassViewImpl: UIVisualEffectView {
   private var isFirstMount: Bool = true
-  @objc public var effectTintColor: UIColor?
+  @objc public var effectTintColor: UIColor? = UIColor.clear
   @objc public var interactive: Bool = false
-  @objc public var style: LiquidGlassEffect = .regular
+  @objc public var style: LiquidGlassEffect = .clear
 
   public override func layoutSubviews() {
     if (self.effect != nil) { return }
@@ -47,7 +47,7 @@ import UIKit
     guard let glassEffectClass = NSClassFromString("UIGlassEffect") as? NSObject.Type else {
       return
     }
-    
+
     // Verify that the effectWithStyle: selector is available
     // This provides an additional safety check for early beta versions
     guard glassEffectClass.responds(to: Selector(("effectWithStyle:"))) else {
@@ -78,9 +78,9 @@ import UIKit
 #else
 
 @objc public class LiquidGlassViewImpl: UIView {
-  @objc public var effectTintColor: UIColor?
+  @objc public var effectTintColor: UIColor? = UIColor.clear
   @objc public var interactive: Bool = false
-  @objc public var style: LiquidGlassEffect = .regular
+  @objc public var style: LiquidGlassEffect = .clear
 
   @objc public func setupView() {}
 }
