@@ -26,9 +26,9 @@ import UIKit
 @available(iOS 26.0, tvOS 26.0, *)
 @objc public class LiquidGlassViewImpl: UIVisualEffectView {
   private var isFirstMount: Bool = true
-  @objc public var effectTintColor: UIColor?
+  @objc public var effectTintColor: UIColor? = UIColor.clear
   @objc public var interactive: Bool = false
-  @objc public var style: LiquidGlassEffect = .regular
+  @objc public var style: LiquidGlassEffect = .clear
 
   public override func layoutSubviews() {
     if (self.effect != nil) { return }
@@ -47,7 +47,7 @@ import UIKit
     guard let glassEffectClass = NSClassFromString("UIGlassEffect") as? NSObject.Type else {
       return
     }
-    
+
     // Verify that the effectWithStyle: selector is available
     // This provides an additional safety check for early beta versions
     guard glassEffectClass.responds(to: Selector(("effectWithStyle:"))) else {
@@ -72,15 +72,23 @@ import UIKit
       // Animate only the effect is changed after first mount.
       UIView.animate { self.effect = glassEffect }
     }
+
+    // UIGlassEffect can reconfigure the internal contentView in a way that
+    // disables user interaction when no subviews are present at the time the
+    // effect is applied. In React Native (Fabric), child component views may
+    // be mounted into contentView *after* layoutSubviews triggers setupView(),
+    // leaving contentView with userInteractionEnabled == false for the
+    // lifetime of this view. Force it back on so touches always reach children.
+    self.contentView.isUserInteractionEnabled = true
   }
 }
 
 #else
 
 @objc public class LiquidGlassViewImpl: UIView {
-  @objc public var effectTintColor: UIColor?
+  @objc public var effectTintColor: UIColor? = UIColor.clear
   @objc public var interactive: Bool = false
-  @objc public var style: LiquidGlassEffect = .regular
+  @objc public var style: LiquidGlassEffect = .clear
 
   @objc public func setupView() {}
 }
